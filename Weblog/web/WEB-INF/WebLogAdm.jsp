@@ -18,9 +18,9 @@
         <a href="#" >View my blog!</a></br>
 
         <form id="PostForm" method="post" action="ControllerServlet">        
-            Title: <input type="text" id="title"/></br>
-            Posting: <input type="text" id="topost"/>
-            <input type="submit" value="Post" id="postbutton"/>
+            Title: <input type="text" name="title"/></br>
+            Posting: <input type="text" name=" topost"/>
+            <input type="submit" value="Post" name="postbutton"/>
         </form>
 
     </body>
