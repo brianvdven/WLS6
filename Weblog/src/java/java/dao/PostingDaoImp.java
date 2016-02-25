@@ -2,12 +2,12 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package dao;
+package java.dao;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import model.Posting;
+import java.model.Posting;
 
 /**
  *

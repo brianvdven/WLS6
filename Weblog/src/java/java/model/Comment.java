@@ -3,7 +3,7 @@
  * and open the template in the editor.
  */
 
-package model;
+package java.model;
 
 import java.util.Date;
 

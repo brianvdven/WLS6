@@ -1,9 +1,9 @@
-package service;
+package java.service;
 
-import dao.PostingDao;
-import dao.PostingDaoImp;
+import java.dao.PostingDao;
+import java.dao.PostingDaoImp;
 import java.util.List;
-import model.Posting;
+import java.model.Posting;
 
 public class WebLogService {
 
