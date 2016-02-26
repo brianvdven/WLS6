@@ -22,7 +22,7 @@ import service.WebLogService;
  *
  * @author pc
  */
-@WebServlet(name = "ControllerServlet", urlPatterns = {"/log", "/admin"})
+@WebServlet(name = "ControllerServlet", urlPatterns = {"/log", "/admin", "/posting"})
 public class ControllerServlet extends HttpServlet {
 
     WebLogService web = new WebLogService();
@@ -81,6 +81,13 @@ public class ControllerServlet extends HttpServlet {
             RequestDispatcher view = request.getRequestDispatcher("WebLogAdm.jsp");
             view.forward(request, response);
 
+        } else if(userPath.equals("/posting")){
+            
+            //getPosting
+            //setattibutes
+            //
+            RequestDispatcher view = request.getRequestDispatcher("Posting.jsp");
+            view.forward(request, response);
         }
     }
 

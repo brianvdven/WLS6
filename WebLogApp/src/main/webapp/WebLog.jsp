@@ -20,11 +20,10 @@
                         <p class="list-group-item-heading"><b>${posting.title}</b></p>
                         <p class="list-group-item">${posting.content}</p>
                         <span class="label label-default">${date}</span>
+                        <a href="posting" class="btn btn-primary btn-sm">Comments</a>
                     </div>
                 </c:forEach>
             </div>
         </div>
-
-
     </body>
 </html>
