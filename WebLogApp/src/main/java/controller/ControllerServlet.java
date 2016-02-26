@@ -7,6 +7,8 @@ package controller;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.Date;
+import java.util.List;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -23,7 +25,7 @@ import service.WebLogService;
 @WebServlet(name = "ControllerServlet", urlPatterns = {"/log", "/admin"})
 public class ControllerServlet extends HttpServlet {
 
-    WebLogService web;
+    WebLogService web = new WebLogService();
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -66,16 +68,20 @@ public class ControllerServlet extends HttpServlet {
         //processRequest(request, response);
 
         String userPath = request.getServletPath();
-        
-        if (userPath.equals("/log")){
+
+        if (userPath.equals("/log")) {
+            List<Posting> postings = web.getPostings();
+            request.setAttribute("postings", postings);
+            Date date = new Date();
+            request.setAttribute("date", date.toString());
             RequestDispatcher view = request.getRequestDispatcher("WebLog.jsp");
             view.forward(request, response);
-        }
-        else if(userPath.equals("/admin")){
+        } else if (userPath.equals("/admin")) {
+
             RequestDispatcher view = request.getRequestDispatcher("WebLogAdm.jsp");
             view.forward(request, response);
+
         }
-//SetAttributess
     }
 
     /**
@@ -90,13 +96,14 @@ public class ControllerServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         String title = request.getParameter("title");
-        String toPost = request.getParameter("topost");
-
+        String toPost = request.getParameter("content");
+        System.out.println(title + "  " + toPost);
         Posting p = new Posting(title, toPost);
         web.addPosting(p);
-        System.out.println("WORKED!!");
+        response.sendRedirect("log");
 
-        request.getRequestDispatcher("WebLogAdmin.jsp").forward(request, response);
+//        RequestDispatcher view = request.getRequestDispatcher("WebLog.jsp");
+//        view.forward(request, response);
     }
 
     /**
