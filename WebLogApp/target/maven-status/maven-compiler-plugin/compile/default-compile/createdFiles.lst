@@ -1,0 +1,6 @@
+controller\ControllerServlet.class
+dao\PostingDao.class
+dao\PostingDaoImp.class
+model\Comment.class
+model\Posting.class
+service\WebLogService.class
