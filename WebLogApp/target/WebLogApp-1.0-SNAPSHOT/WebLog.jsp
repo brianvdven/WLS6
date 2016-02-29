@@ -16,12 +16,16 @@
 
             <div class="jumbotron">
                 <c:forEach var="posting" items="${postings}">
-                    <div class="jumbotron">
-                        <p class="list-group-item-heading"><b>${posting.title}</b></p>
-                        <p class="list-group-item">${posting.content}</p>
-                        <span class="label label-default">${date}</span>
-                        <a href="posting" class="btn btn-primary btn-sm">Comments</a>
-                    </div>
+                    <form name="postingform" action="posting" methdo="GET">
+                        <input type="hidden" name="hiddenId" value="${posting.id}"/>
+                        <div class="jumbotron">         
+                            <p class="list-group-item-heading"><b>${posting.title}</b></p>
+                            <p class="list-group-item">${posting.content}</p>
+                            <span class="label label-default">${date}</span>
+                            <input type="submit" name="commentbtn" value="Comments" class="btn btn-primary btn-sm">
+                        </div>
+                    </form>
+
                 </c:forEach>
             </div>
         </div>

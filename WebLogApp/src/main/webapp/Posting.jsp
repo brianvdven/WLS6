@@ -12,21 +12,27 @@
 
 <html>
     <body>
-        <h1>Title here</h1>
 
-        <p class="list-group-item-heading">${posting.title}</p>
-        <p class="list-group-item">${posting.content}</p>
+<!--<p class="list-group-item" name="postingId">${postingId}</p>-->
+        <p class="list-group-item-heading" name="title"><h1>${title}</h1></p>
+    <p class="list-group-item" name="content">${content}</p>
 
-        <c:forEach var="comment" items="${comments}">
-            <p>${comment.content}</p>
-        </c:forEach>
 
-        <!--<div class="form-group">-->
-            <label for="inputEmail" class="col-lg-2 control-label">Comment</label>
-            <div class="col-lg-12">
-                <input type="text" class="form-control" name="newcomment" placeholder="Comment">
-            </div>
-        <!--</div>-->
 
-    </body>
+
+    <c:forEach var="comment" items="${comments}">
+        <p>${comment.content}</p>
+    </c:forEach>
+
+    <!--<div class="form-group">-->
+    <label for="inputEmail" class="col-lg-2 control-label">Comment</label>
+    <form>
+        <div class="col-lg-12">
+            <input type="text" class="form-control" name="newcomment" placeholder="Comment">
+            <input type="submit" name="placecomment" value="Submit"/>
+        </div>
+    </form>
+    <!--</div>-->
+
+</body>
 </html>

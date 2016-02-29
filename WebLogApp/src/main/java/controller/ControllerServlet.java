@@ -15,6 +15,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import model.Comment;
 import model.Posting;
 import service.WebLogService;
 
@@ -81,11 +82,22 @@ public class ControllerServlet extends HttpServlet {
             RequestDispatcher view = request.getRequestDispatcher("WebLogAdm.jsp");
             view.forward(request, response);
 
-        } else if(userPath.equals("/posting")){
-            
-            //getPosting
-            //setattibutes
-            //
+        } else if (userPath.equals("/posting")) {
+
+            String Id = request.getParameter("hiddenId");
+            List<Posting> postings = web.getPostings();
+            for (Posting p : postings) {
+                if (p.getId() == Long.parseLong(Id)) {
+                    request.setAttribute("postingId", Id);
+                    request.setAttribute("title", p.getTitle());
+                    request.setAttribute("content", p.getContent());
+                    
+                    List<Comment> comments = p.getComments();
+                    request.setAttribute("comments", comments);
+                    break;
+                }
+            }
+
             RequestDispatcher view = request.getRequestDispatcher("Posting.jsp");
             view.forward(request, response);
         }
@@ -102,12 +114,20 @@ public class ControllerServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        String title = request.getParameter("title");
-        String toPost = request.getParameter("content");
-        System.out.println(title + "  " + toPost);
-        Posting p = new Posting(title, toPost);
-        web.addPosting(p);
-        response.sendRedirect("log");
+        String userPath = request.getServletPath();
+
+        if (userPath.equals("/admin")) {
+            String title = request.getParameter("title");
+            String toPost = request.getParameter("content");
+//        String postId = request.getParameter("postId");
+            System.out.println(title + "  " + toPost);
+            Posting p = new Posting(/*Long.parseLong(postId),*/title, toPost);
+            web.addPosting(p);
+            response.sendRedirect("log");
+        }
+//        else if (userPath.equals("log")) {
+//
+//        }
 
 //        RequestDispatcher view = request.getRequestDispatcher("WebLog.jsp");
 //        view.forward(request, response);
