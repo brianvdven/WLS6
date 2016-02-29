@@ -7,6 +7,7 @@ package dao;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import model.Comment;
 import model.Posting;
 
 /**
@@ -17,13 +18,15 @@ public class PostingDaoImp implements PostingDao {
 
     private HashMap<Long, Posting> postings;
     private Long nextId;
+    
+    
 
     public PostingDaoImp() {
         initWeblog();
     }
 
     public void initWeblog() {
-
+        
         postings = new HashMap<Long, Posting>();
 
         postings.put(1L, new Posting(1L, "Aantal internetklanten neemt bij Proximus toe met 28.000", "De Belgische telecomprovider Proximus heeft er in het vierde kwartaal van 2015 30.000 tv-abonnees bijgekregen. Ook nam het aantal klanten dat internet afneemt in het laatste kwartaal toe met 28.000, wat met de hogere prijzen voor de pakketten zorgde voor een extra omzetstijging.\n"

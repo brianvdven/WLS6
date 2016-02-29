@@ -51,9 +51,13 @@
                                             </div>
                                             <button type="submit" class="btn btn-default">Submit</button>
                                         </form>-->
-                    <!--<ul class="nav navbar-nav navbar-right">-->
-                    <!--<li><a href="#">Link</a></li>-->
-                    <!--</ul>-->
+                    <ul class="nav navbar-nav navbar-right">
+                        <li>
+                            <form method="post" name="changeuserform">
+                                <input type="submit" name="changeuserbtn" action="changeUser" value="Change UserType"/>
+                            </form>
+                        </li>
+                    </ul>
                 </div>
             </div>
         </nav>

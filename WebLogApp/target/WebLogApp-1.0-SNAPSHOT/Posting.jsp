@@ -11,6 +11,10 @@
 <jsp:include page="header.jsp"/>
 
 <html>
+
+    <script type="text/javascript">
+
+    </script>
     <body>
 
 <!--<p class="list-group-item" name="postingId">${postingId}</p>-->
@@ -19,20 +23,17 @@
 
 
 
-
+    <p>Comments:</p>
     <c:forEach var="comment" items="${comments}">
-        <p>${comment.content}</p>
+        <p class="list-group-item">${comment.content}</p>
     </c:forEach>
 
-    <!--<div class="form-group">-->
-    <label for="inputEmail" class="col-lg-2 control-label">Comment</label>
+    <label for="inputEmail" class="col-lg-2 control-label">New comment</label>
     <form>
         <div class="col-lg-12">
             <input type="text" class="form-control" name="newcomment" placeholder="Comment">
             <input type="submit" name="placecomment" value="Submit"/>
         </div>
     </form>
-    <!--</div>-->
-
 </body>
 </html>

@@ -7,6 +7,7 @@ package controller;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import javax.servlet.RequestDispatcher;
@@ -15,6 +16,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import model.Comment;
 import model.Posting;
 import service.WebLogService;
@@ -23,7 +25,7 @@ import service.WebLogService;
  *
  * @author pc
  */
-@WebServlet(name = "ControllerServlet", urlPatterns = {"/log", "/admin", "/posting"})
+@WebServlet(name = "ControllerServlet", urlPatterns = {"/log", "/admin", "/posting", "/changeUser"})
 public class ControllerServlet extends HttpServlet {
 
     WebLogService web = new WebLogService();
@@ -69,7 +71,8 @@ public class ControllerServlet extends HttpServlet {
         //processRequest(request, response);
 
         String userPath = request.getServletPath();
-
+        HttpSession session = request.getSession();
+//        System.out.println(session.getAttribute("entitlement"));
         if (userPath.equals("/log")) {
             List<Posting> postings = web.getPostings();
             request.setAttribute("postings", postings);
@@ -78,10 +81,16 @@ public class ControllerServlet extends HttpServlet {
             RequestDispatcher view = request.getRequestDispatcher("WebLog.jsp");
             view.forward(request, response);
         } else if (userPath.equals("/admin")) {
-
+            
+            List<Posting> postings = web.getPostings();
+            request.setAttribute("postings", postings);
+//            if (checkAdmin(session)) {
             RequestDispatcher view = request.getRequestDispatcher("WebLogAdm.jsp");
             view.forward(request, response);
-
+//            } else {
+//                System.out.println("NO ADMIN LOGGED IN");
+//                response.sendRedirect("log");
+//            }
         } else if (userPath.equals("/posting")) {
 
             String Id = request.getParameter("hiddenId");
@@ -91,8 +100,10 @@ public class ControllerServlet extends HttpServlet {
                     request.setAttribute("postingId", Id);
                     request.setAttribute("title", p.getTitle());
                     request.setAttribute("content", p.getContent());
-                    
-                    List<Comment> comments = p.getComments();
+
+                    List<Comment> comments = new ArrayList<Comment>();
+                    comments.add(new Comment(6L, "Cool story!"));
+                    p.setComments(comments);
                     request.setAttribute("comments", comments);
                     break;
                 }
@@ -115,22 +126,34 @@ public class ControllerServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         String userPath = request.getServletPath();
-
+        System.out.println("USERPATH: " + userPath);
         if (userPath.equals("/admin")) {
             String title = request.getParameter("title");
             String toPost = request.getParameter("content");
-//        String postId = request.getParameter("postId");
             System.out.println(title + "  " + toPost);
             Posting p = new Posting(/*Long.parseLong(postId),*/title, toPost);
             web.addPosting(p);
             response.sendRedirect("log");
-        }
-//        else if (userPath.equals("log")) {
-//
-//        }
+        } else if (userPath.equals("/")) {
+            String username = request.getParameter("username");
+            String password = request.getParameter("password");
+            if (username.equals("user") && password.equals("user")) {
+                HttpSession session = request.getSession();
 
-//        RequestDispatcher view = request.getRequestDispatcher("WebLog.jsp");
-//        view.forward(request, response);
+                session.setAttribute("entitlement", "User");
+                response.sendRedirect("log");
+
+            } else if (username.equals("admin") && password.equals("admin")) {
+                HttpSession session = request.getSession();
+
+                session.setAttribute("entitlement", "Admin");
+                response.sendRedirect("log");
+
+            } else {
+                response.sendRedirect("index.jsp");
+
+            }
+        }
     }
 
     /**
@@ -143,4 +166,12 @@ public class ControllerServlet extends HttpServlet {
         return "Short description";
     }// </editor-fold>
 
+    public boolean checkAdmin(HttpSession session) {
+        if (session.getAttribute("entitlement").equals("Admin")) {
+            return true;
+//        } else if (session.getAttribute("entitlement").equals("User")) {
+//            return false;
+        }
+        return true;
+    }
 }
