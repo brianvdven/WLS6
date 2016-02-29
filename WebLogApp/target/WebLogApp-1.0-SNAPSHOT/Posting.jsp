@@ -12,21 +12,25 @@
 
 <html>
     <script type="text/javascript">
-        function PostComment(){
-        var xhttp = new XMLHttpRequest();
-        var commentcontent = document.getElementById("commentbox").value;
-        var postingid = document.getElementById("postingid").value;
-        var parameters = "newcomment=" + commentcontent + "&postingId=" + postingid;
-        xhttp.open("POST", "posting", true);
-        xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-        xhttp.setRequestHeader("Content-length", parameters.length);
-        xhttp.setRequestHeader("Connection", "close");
-        
-        var newelement = document.createElement('div');
-        newelement.innerHTML = "etstse";
-        document.getElementById("outercomment").appendChild(newelement);
+        function PostComment() {
+            var xhttp = new XMLHttpRequest();
+            var commentcontent = document.getElementById("commentbox").value;
+            var postingid = document.getElementById("postingid").value;
+            var parameters = "newcomment=" + commentcontent + "&postingId=" + postingid;
+            xhttp.open("POST", "posting", true);
+            xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+            xhttp.setRequestHeader("Content-length", parameters.length);
+            xhttp.setRequestHeader("Connection", "close");
 
-        xhttp.send(parameters);
+//            var newelement = document.createElement('div');
+            var newelement2 = document.createElement('p');
+            newelement2.className = ".list-group-item";
+            newelement2.innerHTML = commentcontent;
+//            newelement.appendChild(newelement2);
+
+            document.getElementById("outercomment").appendChild(newelement2);
+            document.getElementById("commentbox").value = '';
+            xhttp.send(parameters);
         }
     </script>
     <body>
@@ -38,12 +42,9 @@
 
     <p>Comments:</p>
     <div id="outercomment">
-    <c:forEach var="comment" items="${comments}">
-        <div id="innercomment">
-            <p class="list-group-item">${comment.content}</p>
-            <p class="list-group-item small">${comment.date}</p>
-        </div>
-    </c:forEach>
+        <c:forEach var="comment" items="${comments}">
+            <p >${comment.content}</p>
+        </c:forEach>
     </div>
     <label for="inputEmail" class="col-lg-2 control-label">New comment</label>
     <form name="CommentForm" method="post" action="posting">
@@ -51,8 +52,8 @@
             <input type="hidden" id="postingid" name="postingId" value="${postingId}"/>
 
             <input type="text" id="commentbox" class="form-control" name="newcomment" placeholder="Comment">
-            <input type="submit" name="placecomment" value="Submit"/>
-            <input type="button" value="gogo" onclick= "PostComment()"/>
+            <!--<input type="submit" name="placecomment" value="Submit"/>-->
+            <input type="button" value="Ajax submit" onclick= "PostComment()"/>
         </div>
     </form>
 </body>

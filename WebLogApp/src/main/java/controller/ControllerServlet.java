@@ -34,6 +34,8 @@ public class ControllerServlet extends HttpServlet {
 
     List<Comment> comments = new ArrayList<>();
 
+    public boolean status = true;
+
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
      * methods.
@@ -72,11 +74,14 @@ public class ControllerServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        //processRequest(request, response);
 
         String userPath = request.getServletPath();
         HttpSession session = request.getSession();
-//        System.out.println(session.getAttribute("entitlement"));
+
+        if (status == true) {
+            session.setAttribute("mode", "admin");
+            status = false;
+        }
         if (userPath.equals("/log")) {
             List<Posting> postings = web.getPostings();
             request.setAttribute("postings", postings);
@@ -85,16 +90,16 @@ public class ControllerServlet extends HttpServlet {
             RequestDispatcher view = request.getRequestDispatcher("WebLog.jsp");
             view.forward(request, response);
         } else if (userPath.equals("/admin")) {
+//            if (session.getAttribute("mode").equals("admin")) {
+                List<Posting> postings = web.getPostings();
+                request.setAttribute("postings", postings);
 
-            List<Posting> postings = web.getPostings();
-            request.setAttribute("postings", postings);
-//            if (checkAdmin(session)) {
-            RequestDispatcher view = request.getRequestDispatcher("WebLogAdm.jsp");
-            view.forward(request, response);
+                RequestDispatcher view = request.getRequestDispatcher("WebLogAdm.jsp");
+                view.forward(request, response);
 //            } else {
-//                System.out.println("NO ADMIN LOGGED IN");
 //                response.sendRedirect("log");
 //            }
+
         } else if (userPath.equals("/posting")) {
 
             String Id = request.getParameter("hiddenId");
@@ -129,31 +134,17 @@ public class ControllerServlet extends HttpServlet {
             throws ServletException, IOException {
         String userPath = request.getServletPath();
         System.out.println("USERPATH: " + userPath);
-        if (userPath.equals("/admin")) {
+         if (request.getParameter("ChangeUserAction") != null) {
+            swapMode(request);
+            response.sendRedirect("log");
+        }
+         else if (userPath.equals("/admin")) {
             String title = request.getParameter("title");
             String toPost = request.getParameter("content");
             Posting p = new Posting(/*Long.parseLong(postId),*/title, toPost);
             web.addPosting(p);
             response.sendRedirect("log");
-        } else if (userPath.equals("/")) {
-            String username = request.getParameter("username");
-            String password = request.getParameter("password");
-            if (username.equals("user") && password.equals("user")) {
-                HttpSession session = request.getSession();
 
-                session.setAttribute("entitlement", "User");
-                response.sendRedirect("log");
-
-            } else if (username.equals("admin") && password.equals("admin")) {
-                HttpSession session = request.getSession();
-
-                session.setAttribute("entitlement", "Admin");
-                response.sendRedirect("log");
-
-            } else {
-                response.sendRedirect("index.jsp");
-
-            }
         } else if (userPath.equals("/posting")) {
             String comment = request.getParameter("newcomment");
             String Id = request.getParameter("postingId");
@@ -164,7 +155,7 @@ public class ControllerServlet extends HttpServlet {
             comments.add(new Comment(9L, comment));
             p.setComments(comments);
 //            response.sendRedirect("log");
-        }
+        } 
     }
 
     /**
@@ -177,12 +168,18 @@ public class ControllerServlet extends HttpServlet {
         return "Short description";
     }// </editor-fold>
 
-    public boolean checkAdmin(HttpSession session) {
-        if (session.getAttribute("entitlement").equals("Admin")) {
-            return true;
-//        } else if (session.getAttribute("entitlement").equals("User")) {
-//            return false;
+    public void swapMode(HttpServletRequest request) {
+        HttpSession session = request.getSession();
+        
+        if (session.getAttribute("mode").equals("admin")) {
+            session.setAttribute("mode", "user");
+            request.setAttribute("mode", "user");
+            System.out.println(session.getAttribute("mode"));
+        } else if (session.getAttribute("mode").equals("user")) {
+            session.setAttribute("mode", "admin");
+            request.setAttribute("mode", "admin");
+            System.out.println(session.getAttribute("mode"));
+
         }
-        return true;
     }
 }

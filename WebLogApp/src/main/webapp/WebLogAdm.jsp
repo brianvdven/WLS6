@@ -32,33 +32,36 @@
 
             </form>
         </div>
-        <div class="container">
-            <div class=" col-lg-12">
-                <table class="table table-striped table-hover">
-                    <tr>
-                        <th>Title</th>
-                        <th>Content</th>
-                        <th>Edit</th>
-                        <th>Delete</th>
-                    </tr>
-                    <c:forEach var="post" items="${postings}">
+        <c:if test="${mode == 'admin'}">
+            <div class="container">
+                <div class=" col-lg-12">
+                    <table class="table table-striped table-hover">
                         <tr>
-                            <td>
-                                <c:out value="${post.title}" />
-                            </td>
-                            <td>
-                                <c:out value="${post.content}" />
-                            </td>
-                            <td>
-                                edit
-                            </td>
-                            <td>
-                                delete
-                            </td>
+                            <th>Title</th>
+                            <th>Content</th>
+                            <th>Edit</th>
+                            <th>Delete</th>
                         </tr>
-                    </c:forEach>
-                </table> 
+                        <c:forEach var="post" items="${postings}">
+                            <tr>
+                                <td>
+                                    <c:out value="${post.title}" />
+                                </td>
+                                <td>
+                                    <c:out value="${post.content}" />
+                                </td>
+                                <td>
+                                    edit
+                                </td>
+                                <td>
+                                    delete
+                                </td>
+                            </tr>
+                        </c:forEach>
+                    </table> 
+                </div>
             </div>
-        </div>
+        </c:if>
+
     </body>
 </html>
