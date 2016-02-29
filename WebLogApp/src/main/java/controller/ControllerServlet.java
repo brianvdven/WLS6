@@ -5,6 +5,7 @@
  */
 package controller;
 
+import dao.PostingDaoImp;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
@@ -29,6 +30,9 @@ import service.WebLogService;
 public class ControllerServlet extends HttpServlet {
 
     WebLogService web = new WebLogService();
+    PostingDaoImp dao = new PostingDaoImp();
+
+    List<Comment> comments = new ArrayList<>();
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -81,7 +85,7 @@ public class ControllerServlet extends HttpServlet {
             RequestDispatcher view = request.getRequestDispatcher("WebLog.jsp");
             view.forward(request, response);
         } else if (userPath.equals("/admin")) {
-            
+
             List<Posting> postings = web.getPostings();
             request.setAttribute("postings", postings);
 //            if (checkAdmin(session)) {
@@ -94,16 +98,14 @@ public class ControllerServlet extends HttpServlet {
         } else if (userPath.equals("/posting")) {
 
             String Id = request.getParameter("hiddenId");
+            System.out.println("HIDDENID: " + Id);
             List<Posting> postings = web.getPostings();
             for (Posting p : postings) {
                 if (p.getId() == Long.parseLong(Id)) {
                     request.setAttribute("postingId", Id);
                     request.setAttribute("title", p.getTitle());
                     request.setAttribute("content", p.getContent());
-
-                    List<Comment> comments = new ArrayList<Comment>();
-                    comments.add(new Comment(6L, "Cool story!"));
-                    p.setComments(comments);
+                    comments = p.getComments();
                     request.setAttribute("comments", comments);
                     break;
                 }
@@ -130,7 +132,6 @@ public class ControllerServlet extends HttpServlet {
         if (userPath.equals("/admin")) {
             String title = request.getParameter("title");
             String toPost = request.getParameter("content");
-            System.out.println(title + "  " + toPost);
             Posting p = new Posting(/*Long.parseLong(postId),*/title, toPost);
             web.addPosting(p);
             response.sendRedirect("log");
@@ -153,6 +154,16 @@ public class ControllerServlet extends HttpServlet {
                 response.sendRedirect("index.jsp");
 
             }
+        } else if (userPath.equals("/posting")) {
+            String comment = request.getParameter("newcomment");
+            String Id = request.getParameter("postingId");
+            System.out.println(comment);
+            System.out.println(Id);
+            Posting p = dao.find(Long.parseLong(Id));
+
+            comments.add(new Comment(9L, comment));
+            p.setComments(comments);
+//            response.sendRedirect("log");
         }
     }
 

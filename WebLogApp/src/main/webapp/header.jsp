@@ -54,7 +54,7 @@
                     <ul class="nav navbar-nav navbar-right">
                         <li>
                             <form method="post" name="changeuserform">
-                                <input type="submit" name="changeuserbtn" action="changeUser" value="Change UserType"/>
+                                <input type="submit" name="changeuserbtn" value="Change UserType"/>
                             </form>
                         </li>
                     </ul>
