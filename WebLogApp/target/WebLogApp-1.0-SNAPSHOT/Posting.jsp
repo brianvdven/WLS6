@@ -28,6 +28,8 @@
             newelement2.innerHTML = commentcontent;
 //            newelement.appendChild(newelement2);
 
+            xhttp.open("GET", "posting", true);
+
             document.getElementById("outercomment").appendChild(newelement2);
             document.getElementById("commentbox").value = '';
             xhttp.send(parameters);

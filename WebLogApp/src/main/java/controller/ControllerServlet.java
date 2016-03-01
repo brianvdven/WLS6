@@ -30,7 +30,6 @@ import service.WebLogService;
 public class ControllerServlet extends HttpServlet {
 
     WebLogService web = new WebLogService();
-    PostingDaoImp dao = new PostingDaoImp();
 
     List<Comment> comments = new ArrayList<>();
 
@@ -91,11 +90,11 @@ public class ControllerServlet extends HttpServlet {
             view.forward(request, response);
         } else if (userPath.equals("/admin")) {
 //            if (session.getAttribute("mode").equals("admin")) {
-                List<Posting> postings = web.getPostings();
-                request.setAttribute("postings", postings);
+            List<Posting> postings = web.getPostings();
+            request.setAttribute("postings", postings);
 
-                RequestDispatcher view = request.getRequestDispatcher("WebLogAdm.jsp");
-                view.forward(request, response);
+            RequestDispatcher view = request.getRequestDispatcher("WebLogAdm.jsp");
+            view.forward(request, response);
 //            } else {
 //                response.sendRedirect("log");
 //            }
@@ -134,11 +133,23 @@ public class ControllerServlet extends HttpServlet {
             throws ServletException, IOException {
         String userPath = request.getServletPath();
         System.out.println("USERPATH: " + userPath);
-         if (request.getParameter("ChangeUserAction") != null) {
+        if (request.getParameter("ChangeUserAction") != null) {
             swapMode(request);
             response.sendRedirect("log");
-        }
-         else if (userPath.equals("/admin")) {
+        } else if (request.getParameter("deletebutton") != null) {
+            Long id = Long.parseLong(request.getParameter("hiddenpostid"));
+            web.deletePosting(id);
+            System.out.println("HOIHOIHOI");
+            response.sendRedirect("log");
+
+        } else if (request.getParameter("editbutton") != null) {
+            Long id = Long.parseLong(request.getParameter("hiddenpostid"));
+            String title = request.getParameter("titlepost");
+            String content = request.getParameter("contentpost");
+            web.editPosting(id, title, content);
+            response.sendRedirect("log");
+            
+        } else if (userPath.equals("/admin")) {
             String title = request.getParameter("title");
             String toPost = request.getParameter("content");
             Posting p = new Posting(/*Long.parseLong(postId),*/title, toPost);
@@ -150,12 +161,12 @@ public class ControllerServlet extends HttpServlet {
             String Id = request.getParameter("postingId");
             System.out.println(comment);
             System.out.println(Id);
-            Posting p = dao.find(Long.parseLong(Id));
+            Posting p = web.find(Long.parseLong(Id));
 
             comments.add(new Comment(9L, comment));
             p.setComments(comments);
 //            response.sendRedirect("log");
-        } 
+        }
     }
 
     /**
@@ -170,14 +181,12 @@ public class ControllerServlet extends HttpServlet {
 
     public void swapMode(HttpServletRequest request) {
         HttpSession session = request.getSession();
-        
+
         if (session.getAttribute("mode").equals("admin")) {
             session.setAttribute("mode", "user");
-            request.setAttribute("mode", "user");
             System.out.println(session.getAttribute("mode"));
         } else if (session.getAttribute("mode").equals("user")) {
             session.setAttribute("mode", "admin");
-            request.setAttribute("mode", "admin");
             System.out.println(session.getAttribute("mode"));
 
         }

@@ -43,20 +43,23 @@
                             <th>Delete</th>
                         </tr>
                         <c:forEach var="post" items="${postings}">
+                            <form method="post">
+                            <input type="hidden" name="hiddenpostid" value="${post.id}"
                             <tr>
                                 <td>
-                                    <c:out value="${post.title}" />
+                                    <input type="text" name="titlepost" value="${post.title}"/>
                                 </td>
                                 <td>
-                                    <c:out value="${post.content}" />
+                                    <input type="text" name="contentpost" value="${post.content}"/>
                                 </td>
                                 <td>
-                                    edit
+                                    <input type="submit" value="Edit" name="editbutton"
                                 </td>
                                 <td>
-                                    delete
+                                    <input type="submit" value="Delete" name="deletebutton"/>
                                 </td>
                             </tr>
+                            </form>
                         </c:forEach>
                     </table> 
                 </div>

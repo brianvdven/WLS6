@@ -7,7 +7,6 @@ package dao;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import model.Comment;
 import model.Posting;
 
 /**
@@ -66,4 +65,12 @@ public class PostingDaoImp implements PostingDao {
         }
         return postings.get(id);
     }
+    
+    @Override
+    public void deletePosting(long id){
+        Posting p = find(id);
+        postings.remove(id, p);
+    }
+    
+    
 }
